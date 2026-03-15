@@ -14,16 +14,234 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      contact_messages: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          message: string
+          name: string
+          subject: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          message: string
+          name: string
+          subject?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          message?: string
+          name?: string
+          subject?: string | null
+        }
+        Relationships: []
+      }
+      drivers: {
+        Row: {
+          created_at: string
+          email: string | null
+          id: string
+          license_number: string | null
+          name: string
+          phone: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          license_number?: string | null
+          name: string
+          phone?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          license_number?: string | null
+          name?: string
+          phone?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          company: string | null
+          created_at: string
+          email: string | null
+          full_name: string | null
+          id: string
+          phone: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          company?: string | null
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          company?: string | null
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      shipments: {
+        Row: {
+          created_at: string
+          customer_id: string | null
+          delivered_at: string | null
+          description: string | null
+          destination: string
+          driver_id: string | null
+          estimated_delivery: string | null
+          id: string
+          origin: string
+          recipient_name: string | null
+          recipient_phone: string | null
+          status: string
+          tracking_number: string
+          updated_at: string
+          vehicle_id: string | null
+          weight: string | null
+        }
+        Insert: {
+          created_at?: string
+          customer_id?: string | null
+          delivered_at?: string | null
+          description?: string | null
+          destination: string
+          driver_id?: string | null
+          estimated_delivery?: string | null
+          id?: string
+          origin: string
+          recipient_name?: string | null
+          recipient_phone?: string | null
+          status?: string
+          tracking_number?: string
+          updated_at?: string
+          vehicle_id?: string | null
+          weight?: string | null
+        }
+        Update: {
+          created_at?: string
+          customer_id?: string | null
+          delivered_at?: string | null
+          description?: string | null
+          destination?: string
+          driver_id?: string | null
+          estimated_delivery?: string | null
+          id?: string
+          origin?: string
+          recipient_name?: string | null
+          recipient_phone?: string | null
+          status?: string
+          tracking_number?: string
+          updated_at?: string
+          vehicle_id?: string | null
+          weight?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shipments_driver_id_fkey"
+            columns: ["driver_id"]
+            isOneToOne: false
+            referencedRelation: "drivers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "shipments_vehicle_id_fkey"
+            columns: ["vehicle_id"]
+            isOneToOne: false
+            referencedRelation: "vehicles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      vehicles: {
+        Row: {
+          capacity: string | null
+          created_at: string
+          id: string
+          plate_number: string
+          status: string
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          capacity?: string | null
+          created_at?: string
+          id?: string
+          plate_number: string
+          status?: string
+          type: string
+          updated_at?: string
+        }
+        Update: {
+          capacity?: string | null
+          created_at?: string
+          id?: string
+          plate_number?: string
+          status?: string
+          type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "customer"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +368,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "customer"],
+    },
   },
 } as const
