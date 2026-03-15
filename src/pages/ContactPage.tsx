@@ -31,7 +31,12 @@ export default function ContactPage() {
     }
 
     setLoading(true);
-    const { error } = await supabase.from('contact_messages').insert([result.data]);
+    const { error } = await supabase.from('contact_messages').insert([{
+      name: result.data.name,
+      email: result.data.email,
+      message: result.data.message,
+      subject: result.data.subject || null,
+    }]);
     if (error) {
       toast.error('Failed to send message. Please try again.');
     } else {
