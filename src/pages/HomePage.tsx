@@ -34,7 +34,7 @@ export default function HomePage() {
               </Button>
             </Link>
             <Link to="/auth">
-              <Button variant="outline" size="lg" className="min-w-[200px] border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground">
+              <Button variant="outline" size="lg" className="min-w-[200px] border-primary-foreground/30 text-primary-foreground">
                 Get Started
               </Button>
             </Link>
