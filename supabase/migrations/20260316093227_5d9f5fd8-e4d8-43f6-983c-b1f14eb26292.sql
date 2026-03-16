@@ -1,0 +1,2 @@
+ALTER TABLE public.shipments DROP CONSTRAINT shipments_status_check;
+ALTER TABLE public.shipments ADD CONSTRAINT shipments_status_check CHECK (status IN ('pending', 'processing', 'in_transit', 'arrived_at_hub', 'out_for_delivery', 'delivered', 'cancelled'));
