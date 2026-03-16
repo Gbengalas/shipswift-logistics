@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Package, Truck, MapPin, Shield, Clock, BarChart3 } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import heroBg from '@/assets/hero-logistics.jpg';
 
 const SERVICES = [
   { icon: Truck, title: 'Express Delivery', desc: 'Next-day and same-day shipping for urgent cargo across the country.' },
@@ -19,9 +20,13 @@ export default function HomePage() {
       <Navbar />
 
       {/* Hero */}
-      <section className="bg-primary text-primary-foreground py-20 md:py-32">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-6xl font-display font-extrabold mb-6 tracking-tight">
+      <section
+        className="relative py-20 md:py-32 bg-cover bg-center"
+        style={{ backgroundImage: `url(${heroBg})` }}
+      >
+        <div className="absolute inset-0 bg-primary/80" />
+        <div className="container mx-auto px-4 text-center relative z-10">
+          <h1 className="text-4xl md:text-6xl font-display font-extrabold mb-6 tracking-tight text-primary-foreground">
             Logistics That <span className="text-accent">Move</span> Your Business
           </h1>
           <p className="text-lg md:text-xl text-primary-foreground/70 max-w-2xl mx-auto mb-10">
