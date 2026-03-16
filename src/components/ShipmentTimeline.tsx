@@ -1,9 +1,10 @@
 import { CheckCircle2, Circle, Package, Truck, MapPin, Clock } from 'lucide-react';
 
 const STATUSES = [
-  { key: 'pending', label: 'Order Placed', icon: Clock },
-  { key: 'picked_up', label: 'Picked Up', icon: Package },
+  { key: 'pending', label: 'Pending', icon: Clock },
+  { key: 'processing', label: 'Processing', icon: Package },
   { key: 'in_transit', label: 'In Transit', icon: Truck },
+  { key: 'arrived_at_hub', label: 'Arrived at Hub', icon: MapPin },
   { key: 'out_for_delivery', label: 'Out for Delivery', icon: MapPin },
   { key: 'delivered', label: 'Delivered', icon: CheckCircle2 },
 ];
