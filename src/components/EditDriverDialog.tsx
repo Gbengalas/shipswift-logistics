@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -29,17 +29,17 @@ export default function EditDriverDialog({ driver, open, onOpenChange, onUpdated
   const [form, setForm] = useState({ name: '', phone: '', email: '', license_number: '', status: 'available' });
   const [loading, setLoading] = useState(false);
 
-  // Sync form when driver changes
-  const prevId = useState('')[0];
-  if (driver && driver.id !== prevId) {
-    setForm({
-      name: driver.name,
-      phone: driver.phone || '',
-      email: driver.email || '',
-      license_number: driver.license_number || '',
-      status: driver.status,
-    });
-  }
+  useEffect(() => {
+    if (driver) {
+      setForm({
+        name: driver.name,
+        phone: driver.phone || '',
+        email: driver.email || '',
+        license_number: driver.license_number || '',
+        status: driver.status,
+      });
+    }
+  }, [driver]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
