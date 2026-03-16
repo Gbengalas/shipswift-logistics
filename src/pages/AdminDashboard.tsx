@@ -45,7 +45,7 @@ interface Vehicle {
   status: string;
 }
 
-const STATUS_OPTIONS = ['pending', 'picked_up', 'in_transit', 'out_for_delivery', 'delivered', 'cancelled'];
+const STATUS_OPTIONS = ['pending', 'processing', 'in_transit', 'arrived_at_hub', 'out_for_delivery', 'delivered'];
 const PIE_COLORS = ['hsl(24,95%,53%)', 'hsl(217,33%,17%)', 'hsl(160,84%,39%)', 'hsl(215,16%,47%)', 'hsl(0,84%,60%)', 'hsl(210,20%,80%)'];
 
 export default function AdminDashboard() {
