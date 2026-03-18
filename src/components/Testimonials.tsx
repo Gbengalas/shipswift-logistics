@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Star } from 'lucide-react';
+import { Star, Quote } from 'lucide-react';
+import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 
 const TESTIMONIALS = [
   {
@@ -30,6 +31,7 @@ const TESTIMONIALS = [
 
 export default function Testimonials() {
   const [active, setActive] = useState(0);
+  const { ref, isVisible } = useScrollAnimation();
 
   useEffect(() => {
     const timer = setInterval(() => setActive(prev => (prev + 1) % TESTIMONIALS.length), 5000);
@@ -37,44 +39,48 @@ export default function Testimonials() {
   }, []);
 
   return (
-    <section className="py-20 bg-secondary">
+    <section ref={ref} className="py-24 bg-secondary">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-display font-bold text-center mb-4">What Our Clients Say</h2>
-        <p className="text-muted-foreground text-center mb-12 max-w-xl mx-auto">
+        <h2 className="text-3xl md:text-4xl font-display font-bold text-center mb-4">
+          What Our Clients Say
+        </h2>
+        <p className="text-muted-foreground text-center mb-16 max-w-xl mx-auto">
           Trusted by hundreds of businesses for reliable logistics solutions.
         </p>
 
-        <div className="max-w-2xl mx-auto relative overflow-hidden" style={{ minHeight: 220 }}>
+        <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
           {TESTIMONIALS.map((t, i) => (
             <div
               key={i}
-              className={`absolute inset-0 transition-all duration-500 ease-in-out ${
-                i === active ? 'opacity-100 translate-x-0' : i < active ? 'opacity-0 -translate-x-full' : 'opacity-0 translate-x-full'
+              className={`bg-card border rounded-2xl p-8 shadow-sm hover:shadow-lg transition-all duration-500 relative ${
+                i === active ? 'ring-2 ring-accent/30 shadow-lg' : ''
               }`}
+              style={{
+                opacity: isVisible ? 1 : 0,
+                transform: isVisible ? 'translateY(0)' : 'translateY(30px)',
+                transitionDelay: `${i * 100}ms`,
+                transitionProperty: 'opacity, transform, box-shadow',
+                transitionDuration: '0.6s',
+              }}
+              onClick={() => setActive(i)}
             >
-              <div className="bg-card border rounded-xl p-8 shadow-sm text-center">
-                <div className="flex justify-center gap-1 mb-4">
-                  {Array.from({ length: 5 }).map((_, s) => (
-                    <Star key={s} className={`h-5 w-5 ${s < t.rating ? 'text-accent fill-accent' : 'text-muted-foreground/30'}`} />
-                  ))}
+              <Quote className="h-8 w-8 text-accent/20 absolute top-6 right-6" />
+              <div className="flex gap-1 mb-4">
+                {Array.from({ length: 5 }).map((_, s) => (
+                  <Star key={s} className={`h-4 w-4 ${s < t.rating ? 'text-accent fill-accent' : 'text-muted-foreground/20'}`} />
+                ))}
+              </div>
+              <p className="text-foreground leading-relaxed mb-6 text-sm">"{t.text}"</p>
+              <div className="flex items-center gap-3">
+                <div className="h-10 w-10 rounded-full bg-accent/10 flex items-center justify-center text-accent font-bold text-sm">
+                  {t.name.split(' ').map(n => n[0]).join('')}
                 </div>
-                <p className="text-foreground italic mb-6 leading-relaxed">"{t.text}"</p>
-                <p className="font-display font-semibold">{t.name}</p>
-                <p className="text-sm text-muted-foreground">{t.role}</p>
+                <div>
+                  <p className="font-display font-semibold text-sm">{t.name}</p>
+                  <p className="text-xs text-muted-foreground">{t.role}</p>
+                </div>
               </div>
             </div>
-          ))}
-        </div>
-
-        <div className="flex justify-center gap-2 mt-6">
-          {TESTIMONIALS.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setActive(i)}
-              className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                i === active ? 'bg-accent w-8' : 'bg-muted-foreground/30 hover:bg-muted-foreground/50'
-              }`}
-            />
           ))}
         </div>
       </div>
