@@ -11,7 +11,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Package, Truck, Users, CheckCircle2, Clock, Pencil } from 'lucide-react';
+import { Package, Truck, Users, CheckCircle2, Clock, Pencil, Search, Download, Filter } from 'lucide-react';
 import { toast } from 'sonner';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 
@@ -56,6 +56,10 @@ export default function AdminDashboard() {
   const [drivers, setDrivers] = useState<Driver[]>([]);
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [loading, setLoading] = useState(true);
+
+  // Search & filter state
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState<string>('all');
 
   const [driverDialogOpen, setDriverDialogOpen] = useState(false);
   const [driverForm, setDriverForm] = useState({ name: '', phone: '', email: '', license_number: '' });
@@ -128,6 +132,24 @@ export default function AdminDashboard() {
     else { toast.success('Assigned successfully'); fetchShipments(); }
   };
 
+  const exportCSV = () => {
+    const headers = ['Tracking #', 'Origin', 'Destination', 'Status', 'Date', 'Weight', 'Recipient'];
+    const rows = filteredShipments.map(s => [
+      s.tracking_number, s.origin, s.destination,
+      s.status.replace(/_/g, ' '), new Date(s.created_at).toLocaleDateString(),
+      s.weight || '', s.recipient_name || '',
+    ]);
+    const csv = [headers, ...rows].map(r => r.map(c => `"${c}"`).join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `shipments-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success('CSV exported');
+  };
+
   if (authLoading || loading) {
     return <div className="min-h-screen flex flex-col"><Navbar /><div className="flex-1 flex items-center justify-center"><p className="text-muted-foreground">Loading...</p></div></div>;
   }
@@ -136,6 +158,17 @@ export default function AdminDashboard() {
   const active = shipments.filter(s => !['delivered', 'cancelled'].includes(s.status)).length;
   const delivered = shipments.filter(s => s.status === 'delivered').length;
   const pending = shipments.filter(s => s.status === 'pending').length;
+
+  // Filtered shipments
+  const filteredShipments = shipments.filter(s => {
+    const matchesSearch = !searchQuery ||
+      s.tracking_number.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      s.origin.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      s.destination.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (s.recipient_name || '').toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesStatus = statusFilter === 'all' || s.status === statusFilter;
+    return matchesSearch && matchesStatus;
+  });
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -189,6 +222,36 @@ export default function AdminDashboard() {
 
             {/* Shipments tab */}
             <TabsContent value="shipments">
+              {/* Search, Filter & Export bar */}
+              <div className="flex flex-col sm:flex-row gap-3 mb-4">
+                <div className="relative flex-1">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    value={searchQuery}
+                    onChange={e => setSearchQuery(e.target.value)}
+                    placeholder="Search tracking #, origin, destination, recipient..."
+                    className="pl-9"
+                  />
+                </div>
+                <div className="flex gap-2">
+                  <Select value={statusFilter} onValueChange={setStatusFilter}>
+                    <SelectTrigger className="w-44">
+                      <Filter className="h-4 w-4 mr-2 text-muted-foreground" />
+                      <SelectValue placeholder="All statuses" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Statuses</SelectItem>
+                      {STATUS_OPTIONS.map(s => (
+                        <SelectItem key={s} value={s}>{s.replace(/_/g, ' ').toUpperCase()}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Button variant="outline" size="icon" onClick={exportCSV} title="Export CSV">
+                    <Download className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+
               <div className="bg-card border rounded-xl overflow-x-auto shadow-sm">
                 <table className="w-full text-sm min-w-[700px]">
                   <thead className="bg-secondary">
@@ -203,7 +266,7 @@ export default function AdminDashboard() {
                     </tr>
                   </thead>
                   <tbody>
-                    {shipments.map(s => (
+                    {filteredShipments.map(s => (
                       <tr key={s.id} className="border-t border-border hover:bg-secondary/50 transition-colors">
                         <td className="p-4 font-mono font-medium">{s.tracking_number}</td>
                         <td className="p-4">{s.origin} → {s.destination}</td>
@@ -236,7 +299,11 @@ export default function AdminDashboard() {
                     ))}
                   </tbody>
                 </table>
-                {shipments.length === 0 && <p className="text-center text-muted-foreground py-8">No shipments yet.</p>}
+                {filteredShipments.length === 0 && (
+                  <p className="text-center text-muted-foreground py-8">
+                    {searchQuery || statusFilter !== 'all' ? 'No shipments match your filters.' : 'No shipments yet.'}
+                  </p>
+                )}
               </div>
             </TabsContent>
 
