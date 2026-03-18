@@ -5,7 +5,11 @@ import { Package, Truck, MapPin, Shield, Clock, BarChart3, Zap, Headphones, Chev
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import AnimatedCounter from '@/components/AnimatedCounter';
+import HowItWorks from '@/components/HowItWorks';
+import ImageTextSections from '@/components/ImageTextSections';
+import ParallaxSection from '@/components/ParallaxSection';
 import Testimonials from '@/components/Testimonials';
+import CtaSection from '@/components/CtaSection';
 import heroBg1 from '@/assets/hero-logistics.jpg';
 import heroBg2 from '@/assets/hero-warehouse.jpg';
 import heroBg3 from '@/assets/hero-fleet.jpg';
@@ -150,6 +154,9 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* How It Works */}
+      <HowItWorks />
+
       {/* Animated Counters */}
       <section className="py-16 bg-primary">
         <div className="container mx-auto px-4">
@@ -165,6 +172,12 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Image + Text Split Sections */}
+      <ImageTextSections />
+
+      {/* Parallax Section */}
+      <ParallaxSection />
 
       {/* Services */}
       <section className="py-20 bg-background">
@@ -194,24 +207,7 @@ export default function HomePage() {
       <Testimonials />
 
       {/* CTA */}
-      <section className="py-20 bg-accent">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-display font-bold text-accent-foreground mb-4">Ready to Ship?</h2>
-          <p className="text-accent-foreground/80 mb-10 max-w-lg mx-auto">
-            Create an account and start managing your shipments in minutes.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/track">
-              <Button variant="default" size="lg" className="min-w-[200px]">Track Shipment</Button>
-            </Link>
-            <Link to="/dashboard">
-              <Button variant="outline" size="lg" className="min-w-[200px] border-accent-foreground/30 text-accent-foreground hover:bg-accent-foreground/10">
-                Book Shipment
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
+      <CtaSection />
 
       <Footer />
     </div>
