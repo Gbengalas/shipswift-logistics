@@ -29,7 +29,7 @@ export default function CtaSection() {
             </Button>
           </Link>
           <Link to="/track">
-            <Button variant="outline" size="lg" className="min-w-[220px] border-accent-foreground/30 text-accent-foreground hover:bg-accent-foreground/10 text-base">
+            <Button variant="default" size="lg" className="min-w-[220px] text-base font-bold shadow-lg">
               Track Shipment
             </Button>
           </Link>
