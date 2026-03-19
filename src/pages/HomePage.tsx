@@ -92,7 +92,7 @@ export default function HomePage() {
                     <Button variant="hero" size="lg" className="min-w-[200px]">Track a Shipment</Button>
                   </Link>
                   <Link to="/auth">
-                    <Button variant="outline" size="lg" className="min-w-[200px] border-primary-foreground/30 text-primary-foreground">
+                    <Button variant="hero" size="lg" className="min-w-[200px]">
                       Get Started
                     </Button>
                   </Link>
