@@ -39,7 +39,7 @@ export default function ParallaxSection() {
             </Button>
           </Link>
           <Link to="/contact">
-            <Button variant="outline" size="lg" className="min-w-[200px] border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10">
+            <Button variant="hero" size="lg" className="min-w-[200px]">
               Contact Us
             </Button>
           </Link>
